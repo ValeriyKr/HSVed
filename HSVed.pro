@@ -16,12 +16,18 @@ SOURCES += main.cpp\
         hsved.cpp \
     image.cpp \
     Brush/brush.cpp \
-    Brush/huebrush.cpp
+    Brush/huebrush.cpp \
+    Brush/satbrush.cpp \
+    Brush/valbrush.cpp
 
 HEADERS  += hsved.h \
     image.h \
     Brush/brush.h \
-    Brush/huebrush.h
+    Brush/huebrush.h \
+    Brush/satbrush.h \
+    Brush/valbrush.h
 
 FORMS    += hsved.ui \
-    Brush/huebrush.ui
+    Brush/huebrush.ui \
+    Brush/satbrush.ui \
+    Brush/valbrush.ui

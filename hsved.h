@@ -17,8 +17,10 @@
 #include <QThread>
 #include <QDebug>
 
-#include <image.h>
-#include <Brush/huebrush.h>
+#include "image.h"
+#include "Brush/huebrush.h"
+#include "Brush/satbrush.h"
+#include "Brush/valbrush.h"
 
 namespace Ui {
 class HSVed;
@@ -46,6 +48,7 @@ signals:
     void windowResized(QSize size);
 
 private:
+    Brush* currentBrush;
     QVector<Brush*> brushes;
     QQueue<QPoint> toHandle;
     Image *image;

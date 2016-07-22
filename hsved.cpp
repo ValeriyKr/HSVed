@@ -3,6 +3,7 @@
 
 HSVed::HSVed(QWidget *parent) :
     QMainWindow(parent),
+    currentBrush {nullptr},
     ui(new Ui::HSVed)
 {
     ui->setupUi(this);
@@ -16,6 +17,9 @@ HSVed::HSVed(QWidget *parent) :
     ui->imageView->viewport()->installEventFilter(this);
 
     brushes.push_back(new HueBrush());
+    brushes.push_back(new SatBrush());
+    brushes.push_back(new ValBrush());
+    currentBrush = brushes[2];
 }
 
 
@@ -106,11 +110,11 @@ bool HSVed::eventFilter(QObject *watched, QEvent *event) {
                 toHandle.enqueue(posOnImage(me->pos()));
                 return true;
             } else if (me->button() == Qt::RightButton) {
-                brushes[0]->showSettings();
+                currentBrush->showSettings();
             }
         } else if (event->type() == QEvent::MouseButtonRelease) {
             while (!toHandle.empty()) {
-                brushes[0]->affect(image->pixmap(), toHandle.dequeue());
+                currentBrush->affect(image->pixmap(), toHandle.dequeue());
             }
             /*std::thread t(Brush::affectBrushWrapper, std::cref(*brushes[0]),
                           std::ref(image->paintMutex), std::ref(image->pixmap()),
@@ -122,9 +126,9 @@ bool HSVed::eventFilter(QObject *watched, QEvent *event) {
         } else if (event->type() == QEvent::Wheel) {
             auto we = static_cast<QWheelEvent*>(event);
             if (we->delta() > 0) {
-                brushes[0]->setSize(static_cast<int> (brushes[0]->size()*1.1) + 1);
+                currentBrush->setSize(static_cast<int> (currentBrush->size()*1.1) + 1);
             } else {
-                brushes[0]->setSize(static_cast<int> (brushes[0]->size()*0.9));
+                currentBrush->setSize(static_cast<int> (currentBrush->size()*0.9));
             }
         }
 //    }
