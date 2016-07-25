@@ -33,20 +33,19 @@ void SatBrush::affect(QImage &pixmap, const QPoint &point) const {
     for (int i = xmin; i < xmax; ++i)
         for (int j = ymin; j < ymax; ++j) {
             int deltaSquare {(i-point.x())*(i-point.x()) + (j-point.y())*(j-point.y())};
-            double delta {std::sqrt(deltaSquare)};
             if (deltaSquare <= _size*_size) {
+                double delta {std::sqrt(deltaSquare)};
                 pixel = pixmap.pixelColor(i, j);
                 pixel.setHsv(pixel.hue(),
-                             std::max(0,
-                                      std::min(255,
-                                               static_cast<int> (pixel.saturation() +
-                                                                 _intensity *
-                                                                 (delta/_size <= _hardness ?
-                                                                      1 :
-                                                                      1 - (delta-_size*_hardness)/(_size*(1-_hardness))))
-                                              )),
-                             pixel.value()
-                            );
+                    std::max(0,
+                        std::min(255,
+                            static_cast<int> (pixel.saturation() + _intensity *
+                                              (delta/_size <= _hardness ?
+                                                  1 :
+                                                  1 - (delta-_size*_hardness)/(_size*(1-_hardness)))))
+                    ),
+                    pixel.value()
+                );
                 pixmap.setPixelColor(i, j, pixel);
             }
         }
@@ -56,6 +55,11 @@ void SatBrush::affect(QImage &pixmap, const QPoint &point) const {
 void SatBrush::showSettings() {
     this->hide();
     this->show();
+}
+
+
+void SatBrush::hideSettings() {
+    this->hide();
 }
 
 

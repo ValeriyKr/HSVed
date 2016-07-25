@@ -33,20 +33,18 @@ void ValBrush::affect(QImage &pixmap, const QPoint &point) const {
     for (int i = xmin; i < xmax; ++i)
         for (int j = ymin; j < ymax; ++j) {
             int deltaSquare {(i-point.x())*(i-point.x()) + (j-point.y())*(j-point.y())};
-            double delta {std::sqrt(deltaSquare)};
             if (deltaSquare <= _size*_size) {
+                double delta {std::sqrt(deltaSquare)};
                 pixel = pixmap.pixelColor(i, j);
-                pixel.setHsv(pixel.hue(),
-                             pixel.saturation(),
-                             std::max(0,
-                                      std::min(255,
-                                               static_cast<int> (pixel.value() +
-                                                                 _intensity *
-                                                                 (delta/_size <= _hardness ?
-                                                                      1 :
-                                                                      1 - (delta-_size*_hardness)/(_size*(1-_hardness))))
-                                              ))
-                            );
+                pixel.setHsv(pixel.hue(), pixel.saturation(),
+                    std::max(0,
+                        std::min(255,
+                            static_cast<int> (pixel.value() + _intensity *
+                                              (delta/_size <= _hardness ?
+                                                  1 :
+                                                  1 - (delta-_size*_hardness)/(_size*(1-_hardness)))))
+                    )
+                );
                 pixmap.setPixelColor(i, j, pixel);
             }
         }
@@ -56,6 +54,11 @@ void ValBrush::affect(QImage &pixmap, const QPoint &point) const {
 void ValBrush::showSettings() {
     this->hide();
     this->show();
+}
+
+
+void ValBrush::hideSettings() {
+    this->hide();
 }
 
 

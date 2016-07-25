@@ -18,16 +18,19 @@ SOURCES += main.cpp\
     Brush/brush.cpp \
     Brush/huebrush.cpp \
     Brush/satbrush.cpp \
-    Brush/valbrush.cpp
+    Brush/valbrush.cpp \
+    brushstore.cpp
 
 HEADERS  += hsved.h \
     image.h \
     Brush/brush.h \
     Brush/huebrush.h \
     Brush/satbrush.h \
-    Brush/valbrush.h
+    Brush/valbrush.h \
+    brushstore.h
 
 FORMS    += hsved.ui \
     Brush/huebrush.ui \
     Brush/satbrush.ui \
-    Brush/valbrush.ui
+    Brush/valbrush.ui \
+    brushstore.ui

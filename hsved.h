@@ -14,10 +14,11 @@
 #include <QMouseEvent>
 #include <QVector>
 #include <QQueue>
-#include <QThread>
+#include <QCursor>
 #include <QDebug>
 
 #include "image.h"
+#include "brushstore.h"
 #include "Brush/huebrush.h"
 #include "Brush/satbrush.h"
 #include "Brush/valbrush.h"
@@ -39,7 +40,7 @@ public:
 protected:
     void resizeEvent(QResizeEvent *event);
     void showEvent(QShowEvent *event);
-    void paintEvent(QPaintEvent *event);
+    //void paintEvent(QPaintEvent *event);
     void paintEvent();
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
@@ -49,10 +50,12 @@ signals:
 
 private:
     Brush* currentBrush;
-    QVector<Brush*> brushes;
+    //QVector<Brush*> brushes;
+    BrushStore brushes;
     QQueue<QPoint> toHandle;
     Image *image;
     Ui::HSVed *ui;
+    QCursor cursor;
 };
 
 #endif // HSVED_H

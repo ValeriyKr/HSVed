@@ -26,6 +26,7 @@ public:
     virtual void setSize(int size);
     virtual void sizeChanged(int size) = 0;
     virtual void showSettings() = 0;
+    virtual void hideSettings() = 0;
     virtual ~Brush() = 0;
 
 protected:

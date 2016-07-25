@@ -33,12 +33,14 @@ void HueBrush::affect(QImage &pixmap, const QPoint &point) const {
     for (int i = xmin; i < xmax; ++i)
         for (int j = ymin; j < ymax; ++j) {
             int deltaSquare {(i-point.x())*(i-point.x()) + (j-point.y())*(j-point.y())};
-            double delta {std::sqrt(deltaSquare)};
             if (deltaSquare <= _size*_size) {
+                double delta {std::sqrt(deltaSquare)};
                 pixel = pixmap.pixelColor(i, j);
-                pixel.setHsv(pixel.hue() + _intensity * (delta/_size <= _hardness ? 1 : 1 - (delta-_size*_hardness)/(_size*(1-_hardness))),
+                pixel.setHsv(pixel.hue() + _intensity * (delta/_size <= _hardness ?
+                                                             1 :
+                                                             1 - (delta-_size*_hardness)/(_size*(1-_hardness))),
                              pixel.saturation(), pixel.value()
-                            );
+                );
                 pixmap.setPixelColor(i, j, pixel);
             }
         }
@@ -48,6 +50,11 @@ void HueBrush::affect(QImage &pixmap, const QPoint &point) const {
 void HueBrush::showSettings() {
     this->hide();
     this->show();
+}
+
+
+void HueBrush::hideSettings() {
+    this->hide();
 }
 
 

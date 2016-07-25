@@ -31,7 +31,8 @@ public:
 public slots:
     void affect(QImage &pixmap, const QPoint &point) const;
     void showSettings();
-    virtual void setSize(int size);
+    void hideSettings();
+    void setSize(int size);
     void setHardness(double hardness);
     void setIntensity(int intensity);
 

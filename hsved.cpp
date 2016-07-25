@@ -16,17 +16,15 @@ HSVed::HSVed(QWidget *parent) :
     ui->imageView->viewport()->setMouseTracking(true);
     ui->imageView->viewport()->installEventFilter(this);
 
-    brushes.push_back(new HueBrush());
-    brushes.push_back(new SatBrush());
-    brushes.push_back(new ValBrush());
-    currentBrush = brushes[2];
+    ui->imageView->setCursor(cursor);
+    brushes.show();
 }
 
 
 const QPoint HSVed::posOnImage(const QPoint &pos) const {
     return QPoint(static_cast<int> (pos.x() * (1.0*image->size().width() / ui->imageView->width())),
                   static_cast<int> (pos.y() * (1.0*image->size().height() / ui->imageView->height()))
-                 );
+    );
 }
 
 
@@ -66,15 +64,8 @@ void HSVed::resizeEvent(QResizeEvent *event) {
 
 
 void HSVed::showEvent(QShowEvent *event) {
+    QWidget::showEvent(event);
     ui->imageView->fitInView(image->scene()->sceneRect(), Qt::KeepAspectRatio);
-}
-
-
-void HSVed::paintEvent(QPaintEvent *event) {
-    if (image->edited) {
-        image->updateScene();
-        image->edited = false;
-    }
 }
 
 
@@ -87,6 +78,7 @@ void HSVed::paintEvent() {
 
 
 void HSVed::closeEvent(QCloseEvent *event) {
+    QWidget::closeEvent(event);
     QApplication::exit(0);
 }
 
@@ -94,42 +86,39 @@ void HSVed::closeEvent(QCloseEvent *event) {
 bool HSVed::eventFilter(QObject *watched, QEvent *event) {
 //    Uncomment this, if not only imageView will handled
 //    if (watched == ui->imageView || watched == ui->imageView->viewport()) {
-        if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseMove) {
-            auto me = static_cast<QMouseEvent*>(event);
-            if (me->buttons() == Qt::LeftButton) {
-                //QPoint pos = posOnImage(me->pos());
-                //Brush::affect(*brushes[0], image->painter(), pos);
-
-                /*std::thread t(Brush::affectBrushWrapper, std::cref(*brushes[0]),
-                              std::ref(image->painter_mutex), std::ref(image->painter()),
-                              std::cref(pos)
-                             );
-                t.detach();*/
-                //qDebug() << "done";
-                //paintEvent();
-                toHandle.enqueue(posOnImage(me->pos()));
-                return true;
-            } else if (me->button() == Qt::RightButton) {
-                currentBrush->showSettings();
+        switch (event->type()) {
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseMove:
+            {
+                auto me = static_cast<QMouseEvent*>(event);
+                if (me->buttons() == Qt::LeftButton) {
+                    toHandle.enqueue(posOnImage(me->pos()));
+                    return true;
+                } else if (me->button() == Qt::RightButton) {
+                    brushes.show();
+                    return true;
+                }
             }
-        } else if (event->type() == QEvent::MouseButtonRelease) {
+            break;
+        case QEvent::MouseButtonRelease:
             while (!toHandle.empty()) {
-                currentBrush->affect(image->pixmap(), toHandle.dequeue());
+                brushes.current().affect(image->pixmap(), toHandle.dequeue());
             }
-            /*std::thread t(Brush::affectBrushWrapper, std::cref(*brushes[0]),
-                          std::ref(image->paintMutex), std::ref(image->pixmap()),
-                          std::ref(toHandle)
-                         );
-            t.join();*/
             paintEvent();
             return true;
-        } else if (event->type() == QEvent::Wheel) {
-            auto we = static_cast<QWheelEvent*>(event);
-            if (we->delta() > 0) {
-                currentBrush->setSize(static_cast<int> (currentBrush->size()*1.1) + 1);
-            } else {
-                currentBrush->setSize(static_cast<int> (currentBrush->size()*0.9));
+        case QEvent::Wheel:
+            {
+                auto we = static_cast<QWheelEvent*>(event);
+                if (we->delta() > 0) {
+                    brushes.current().setSize(static_cast<int> (brushes.current().size()*1.1) + 1);
+                } else {
+                    brushes.current().setSize(static_cast<int> (brushes.current().size()*0.9));
+                }
+                return true;
             }
+            break;
+        default:
+            return false;
         }
 //    }
     return false;
