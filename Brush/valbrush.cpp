@@ -13,11 +13,14 @@ ValBrush::ValBrush(QWidget *parent) :
     _intensity {20}
 {
     ui->setupUi(this);
+    this->setMinimumSize(QWidget::size());
+    this->setMaximumSize(QWidget::size());
     QObject::connect(ui->ctrlSize, SIGNAL(valueChanged(int)), this, SLOT(setSize(int)));
     QObject::connect(this, SIGNAL(sizeChanged(int)), ui->ctrlSize, SLOT(setValue(int)));
     QObject::connect(ui->ctrlHardness, SIGNAL(valueChanged(double)), this, SLOT(setHardness(double)));
     QObject::connect(ui->ctrlIntensity, SIGNAL(valueChanged(int)), this, SLOT(setIntensity(int)));
 }
+
 
 const QString & ValBrush::name() {
     return _name;

@@ -29,6 +29,7 @@ public:
 public slots:
     void brushChanged(int index);
     void showBrushSettings();
+    void show();
 
 private:
     Ui::BrushStore *ui;

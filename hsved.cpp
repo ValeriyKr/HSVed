@@ -7,6 +7,12 @@ HSVed::HSVed(QWidget *parent) :
     ui(new Ui::HSVed)
 {
     ui->setupUi(this);
+    QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(close()));
+    QObject::connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(close()));
+    QObject::connect(ui->actionSave_As, SIGNAL(triggered()), this, SLOT(close()));
+    QObject::connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+    QObject::connect(ui->actionBrushes, SIGNAL(triggered()), &brushes, SLOT(show()));
+    QObject::connect(ui->actionFilters, SIGNAL(triggered()), this, SLOT(close()));
 
     image = new Image("/home/valeriyk/av6.png");
     ui->imageView->setScene(const_cast<QGraphicsScene*> (image->scene()));

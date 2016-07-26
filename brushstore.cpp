@@ -7,6 +7,8 @@ BrushStore::BrushStore(QWidget *parent) :
     _currentIndex {0}
 {
     ui->setupUi(this);
+    this->setMinimumSize(this->size());
+    this->setMaximumSize(this->size());
 
     brushes.push_back(new HueBrush);
     brushes.push_back(new SatBrush);
@@ -48,6 +50,12 @@ void BrushStore::brushChanged(int index) {
 
 void BrushStore::showBrushSettings() {
     brushes[_currentIndex]->showSettings();
+}
+
+
+void BrushStore::show() {
+    hide();
+    QWidget::show();
 }
 
 
