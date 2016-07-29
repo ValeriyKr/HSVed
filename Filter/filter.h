@@ -28,7 +28,7 @@ public:
     explicit Filter();
     virtual const QString &name() = 0;
     virtual void affect(QImage &pixmap) = 0;
-    virtual const QString &params() const = 0;
+    virtual const QString params() const = 0;
     virtual void setParams(const QString &params) = 0;
     virtual ~Filter() = 0;
 };

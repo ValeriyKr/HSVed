@@ -26,7 +26,7 @@ Image::Image(const QString &file, QObject *parent)
     _scene {new QGraphicsScene(this)},
     filename {file},
     _pixmap {new QImage(filename)},
-    _size {_pixmap->width(), _pixmap->height()}
+    _size {_pixmap->size()}
 {
     updateScene();
 }
@@ -37,7 +37,7 @@ const QSize & Image::size() const {
 }
 
 
-QImage & Image::pixmap() {
+QImage &Image::pixmap() {
     edited = true;
     return *_pixmap;
 }
@@ -49,6 +49,7 @@ const QGraphicsScene * Image::scene() const {
 
 
 void Image::updateScene() {
+    _size = _pixmap->size();
     QPixmap p {QPixmap::fromImage(*this->_pixmap)};
     _scene->addPixmap(p);
     _scene->setSceneRect(this->_pixmap->rect());

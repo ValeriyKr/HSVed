@@ -18,7 +18,7 @@ class CropFilter : public QDialog, public Filter
 public:
     explicit CropFilter(QDialog *parent = 0);
     const QString &name();
-    const QString &params() const;
+    const QString params() const;
     void setParams(const QString &params);
     ~CropFilter();
 
@@ -28,6 +28,7 @@ public slots:
 private:
     Ui::CropFilter *ui;
     static const QString _name;
+    static const QString sep;
     QRect rect;
     QImage *image;
 

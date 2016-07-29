@@ -2,6 +2,7 @@
 #include "ui_cropfilter.h"
 
 const QString CropFilter::_name {"Crop"};
+const QString CropFilter::sep {";"};
 
 CropFilter::CropFilter(QDialog *parent) :
     QDialog(parent),
@@ -10,6 +11,9 @@ CropFilter::CropFilter(QDialog *parent) :
 {
     ui->setupUi(this);
     setModal(true);
+
+    QObject::connect(ui->ctrlApply, SIGNAL(clicked(bool)), this, SLOT(continueAffecting()));
+    QObject::connect(ui->ctrlCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }
 
 
@@ -20,7 +24,7 @@ const QString &CropFilter::name() {
 
 void CropFilter::affect(QImage &pixmap) {
     image = &pixmap;
-    show();
+    exec();
 }
 
 
@@ -30,7 +34,8 @@ void CropFilter::continueAffecting() {
            );
     close();
     if (nullptr != image) {
-        *image = image->copy(rect);
+        QImage newImage {image->copy(rect)};
+        *image = std::move(newImage);
         image = nullptr;
     } else {
         // throw exception
@@ -38,13 +43,19 @@ void CropFilter::continueAffecting() {
 }
 
 
-const QString &CropFilter::params() const {
-
+const QString CropFilter::params() const {
+    return QString(rect.x() + sep + rect.y() + sep +
+                   rect.width() + sep + rect.height());
 }
 
 
 void CropFilter::setParams(const QString &params) {
-
+    auto args = params.split(sep);
+    if (args.length() != 4) { // x, y, width and height
+        // throw
+    }
+    rect = QRect(args[0].toInt(), args[1].toInt(),  // x, y
+                 args[2].toInt(), args[3].toInt()); // w, h
 }
 
 
