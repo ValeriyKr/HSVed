@@ -25,6 +25,7 @@ HSVed::HSVed(QWidget *parent) :
     currentBrush {nullptr},
     ui(new Ui::HSVed)
 {
+    new CropFilter();
     ui->setupUi(this);
     QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(close()));
     QObject::connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(close()));

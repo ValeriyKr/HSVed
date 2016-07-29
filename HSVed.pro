@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     Brush/huebrush.cpp \
     Brush/satbrush.cpp \
     Brush/valbrush.cpp \
-    brushstore.cpp
+    brushstore.cpp \
+    Filter/filter.cpp \
+    Filter/cropfilter.cpp
 
 HEADERS  += hsved.h \
     image.h \
@@ -38,10 +40,13 @@ HEADERS  += hsved.h \
     Brush/huebrush.h \
     Brush/satbrush.h \
     Brush/valbrush.h \
-    brushstore.h
+    brushstore.h \
+    Filter/filter.h \
+    Filter/cropfilter.h
 
 FORMS    += hsved.ui \
     Brush/huebrush.ui \
     Brush/satbrush.ui \
     Brush/valbrush.ui \
-    brushstore.ui
+    brushstore.ui \
+    Filter/cropfilter.ui

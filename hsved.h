@@ -41,6 +41,8 @@
 #include "Brush/huebrush.h"
 #include "Brush/satbrush.h"
 #include "Brush/valbrush.h"
+#include "Filter/filter.h"
+#include "Filter/cropfilter.h"
 
 namespace Ui {
 class HSVed;
