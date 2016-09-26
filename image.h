@@ -40,6 +40,7 @@ public:
     const QSize & size() const;
     QImage & pixmap();
     const QGraphicsScene * scene() const;
+    void save(const QString &filename, const QString &format, const int quality);
     ~Image();
 
 signals:

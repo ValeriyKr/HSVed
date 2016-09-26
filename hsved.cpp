@@ -33,7 +33,7 @@ HSVed::HSVed(QWidget *parent) :
     QObject::connect(ui->actionBrushes, SIGNAL(triggered()), &brushes, SLOT(show()));
     QObject::connect(ui->actionFilters, SIGNAL(triggered()), this, SLOT(close()));
 
-    image = new Image("/home/valeriyk/av6.png");
+    image = new Image(QFileDialog::getOpenFileName(this, "Image", QDir::homePath()));
     ui->imageView->setScene(const_cast<QGraphicsScene*> (image->scene()));
 
     ui->imageView->installEventFilter(this);
@@ -109,43 +109,55 @@ void HSVed::closeEvent(QCloseEvent *event) {
 
 
 bool HSVed::eventFilter(QObject *watched, QEvent *event) {
-//    Uncomment this, if not only imageView will handled
-//    if (watched == ui->imageView || watched == ui->imageView->viewport()) {
+    if (watched == ui->imageView || watched == ui->imageView->viewport()) {
         switch (event->type()) {
         case QEvent::MouseButtonPress:
         case QEvent::MouseMove:
-            {
-                auto me = static_cast<QMouseEvent*>(event);
-                if (me->buttons() == Qt::LeftButton) {
-                    toHandle.enqueue(posOnImage(me->pos()));
-                    return true;
-                } else if (me->button() == Qt::RightButton) {
-                    brushes.show();
-                    return true;
-                }
+        {
+            auto me = static_cast<QMouseEvent*>(event);
+            if (me->buttons() == Qt::LeftButton) {
+                toHandle.enqueue(posOnImage(me->pos()));
+                return true;
+            } else if (me->button() == Qt::RightButton) {
+                brushes.show();
+                return true;
             }
             break;
+        }
         case QEvent::MouseButtonRelease:
+        {
             while (!toHandle.empty()) {
                 brushes.current().affect(image->pixmap(), toHandle.dequeue());
             }
             paintEvent();
             return true;
+        }
         case QEvent::Wheel:
-            {
-                auto we = static_cast<QWheelEvent*>(event);
-                if (we->delta() > 0) {
-                    brushes.current().setSize(static_cast<int> (brushes.current().size()*1.1) + 1);
-                } else {
-                    brushes.current().setSize(static_cast<int> (brushes.current().size()*0.9));
-                }
-                return true;
+        {
+            auto we = static_cast<QWheelEvent*>(event);
+            if (we->delta() > 0) {
+                brushes.current().setSize(static_cast<int> (brushes.current().size()*1.1) + 1);
+            } else {
+                brushes.current().setSize(static_cast<int> (brushes.current().size()*0.9));
             }
-            break;
+            return true;
+        }
+        case QEvent::KeyRelease:
+        {
+            auto ke = static_cast<QKeyEvent*>(event);
+            switch (ke->key()) {
+            case Qt::Key_S:
+            {
+                if (ke->modifiers() & Qt::ControlModifier) {
+                    image->save(QFileDialog::getSaveFileName(this, "Image", QDir::homePath(), "Images (*.jpg)"), "JPG", 100);
+                }
+            }
+            }
+        }
         default:
             return false;
         }
-//    }
+    }
     return false;
 }
 

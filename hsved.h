@@ -35,6 +35,7 @@
 #include <QQueue>
 #include <QCursor>
 #include <QDebug>
+#include <QFileDialog>
 
 #include "image.h"
 #include "brushstore.h"

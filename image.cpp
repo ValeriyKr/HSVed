@@ -48,6 +48,11 @@ const QGraphicsScene * Image::scene() const {
 }
 
 
+void Image::save(const QString &filename, const QString &format, const int quality) {
+    _pixmap->save(filename, format.toStdString().c_str(), quality);
+}
+
+
 void Image::updateScene() {
     _size = _pixmap->size();
     QPixmap p {QPixmap::fromImage(*this->_pixmap)};
