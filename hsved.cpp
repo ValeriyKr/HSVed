@@ -126,6 +126,8 @@ bool HSVed::eventFilter(QObject *watched, QEvent *event) {
         }
         case QEvent::MouseButtonRelease:
         {
+            undo.push_back(image->pixmap().copy(QRect(0, 0, image->size().width(), image->size().height())));
+            redo.clear();
             while (!toHandle.empty()) {
                 brushes.current().affect(image->pixmap(), toHandle.dequeue());
             }
@@ -151,7 +153,30 @@ bool HSVed::eventFilter(QObject *watched, QEvent *event) {
                 if (ke->modifiers() & Qt::ControlModifier) {
                     image->save(QFileDialog::getSaveFileName(this, "Image", QDir::homePath(), "Images (*.jpg)"), "JPG", 100);
                 }
+                break;
             }
+            case Qt::Key_Z:
+            {
+                if (ke->modifiers() & Qt::ControlModifier) {
+                    if (undo.isEmpty()) break;
+                    redo.push_back(image->pixmap());
+                    image->setPixmap(undo.top());
+                    undo.pop_back();
+                }
+                break;
+            }
+            case Qt::Key_R:
+            {
+                if (ke->modifiers() & Qt::ControlModifier) {
+                    if (redo.isEmpty()) break;
+                    undo.push(image->pixmap());
+                    image->setPixmap(redo.top());
+                    redo.pop();
+                }
+                break;
+            }
+            default:
+                break;
             }
         }
         default:

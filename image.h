@@ -36,9 +36,13 @@ public:
     bool edited;
     std::mutex paintMutex;
 
+    Image();
     explicit Image(const QString &file, QObject *parent = 0);
+    Image(const Image &src);
+    Image & operator=(const Image &src);
     const QSize & size() const;
     QImage & pixmap();
+    void setPixmap(const QImage &pixmap);
     const QGraphicsScene * scene() const;
     void save(const QString &filename, const QString &format, const int quality);
     ~Image();

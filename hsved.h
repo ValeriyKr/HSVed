@@ -33,6 +33,7 @@
 #include <QMouseEvent>
 #include <QVector>
 #include <QQueue>
+#include <QStack>
 #include <QCursor>
 #include <QDebug>
 #include <QFileDialog>
@@ -76,6 +77,8 @@ private:
     BrushStore brushes;
     QQueue<QPoint> toHandle;
     Image *image;
+    QStack<QImage> undo;
+    QStack<QImage> redo;
     Ui::HSVed *ui;
     QCursor cursor;
 };

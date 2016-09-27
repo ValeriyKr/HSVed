@@ -43,6 +43,15 @@ QImage &Image::pixmap() {
 }
 
 
+void Image::setPixmap(const QImage &pixmap) {
+    edited = true;
+    delete _pixmap;
+    _pixmap = new QImage(pixmap);
+    _size = _pixmap->size();
+    updateScene();
+}
+
+
 const QGraphicsScene * Image::scene() const {
     return _scene;
 }
